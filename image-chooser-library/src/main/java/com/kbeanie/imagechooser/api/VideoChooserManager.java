@@ -33,6 +33,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.kbeanie.imagechooser.BuildConfig;
+import com.kbeanie.imagechooser.factory.DateFactory;
 import com.kbeanie.imagechooser.threads.VideoProcessorListener;
 import com.kbeanie.imagechooser.threads.VideoProcessorThread;
 
@@ -162,7 +163,7 @@ public class VideoChooserManager extends BChooser implements
         try {
             Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
             filePathOriginal = FileUtils.getDirectory(foldername)
-                    + File.separator + Calendar.getInstance().getTimeInMillis()
+                    + File.separator + DateFactory.getInstance().getTimeInMillis() //Calendar.getInstance().getTimeInMillis()
                     + ".mp4";
             intent.putExtra(MediaStore.EXTRA_OUTPUT,
                     Uri.fromFile(new File(filePathOriginal)));
