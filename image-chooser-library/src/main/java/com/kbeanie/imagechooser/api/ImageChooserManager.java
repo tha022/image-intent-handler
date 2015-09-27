@@ -28,7 +28,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.kbeanie.imagechooser.BuildConfig;
-import com.kbeanie.imagechooser.factory.UriFactory;
+import com.kbeanie.imagechooser.exceptions.ChooserException;
 import com.kbeanie.imagechooser.threads.ImageProcessorListener;
 import com.kbeanie.imagechooser.threads.ImageProcessorThread;
 
@@ -40,7 +40,8 @@ import com.kbeanie.imagechooser.threads.ImageProcessorThread;
  */
 public class ImageChooserManager extends BChooser implements
         ImageProcessorListener {
-    private final static String TAG = "ImageChooserManager";
+
+    private final static String TAG = ImageChooserManager.class.getSimpleName();
 
     private ImageChooserListener listener;
 
@@ -194,10 +195,10 @@ public class ImageChooserManager extends BChooser implements
     }
 
     @Override
-    public String choose() throws Exception {
+    public String choose() throws ChooserException {
         String path = null;
         if (listener == null) {
-            throw new IllegalArgumentException(
+            throw new ChooserException(
                     "ImageChooserListener cannot be null. Forgot to set ImageChooserListener???");
         }
         switch (type) {
@@ -208,13 +209,13 @@ public class ImageChooserManager extends BChooser implements
                 path = takePicture();
                 break;
             default:
-                throw new IllegalArgumentException(
+                throw new ChooserException(
                         "Cannot choose a video in ImageChooserManager");
         }
         return path;
     }
 
-    private void choosePicture() throws Exception {
+    private void choosePicture() throws ChooserException {
         checkDirectory();
         try {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -224,11 +225,11 @@ public class ImageChooserManager extends BChooser implements
             }
             startActivity(intent);
         } catch (ActivityNotFoundException e) {
-            throw new Exception("Activity not found");
+            throw new ChooserException(e);
         }
     }
 
-    private String takePicture() throws Exception {
+    private String takePicture() throws ChooserException {
         checkDirectory();
         try {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -239,7 +240,7 @@ public class ImageChooserManager extends BChooser implements
             }
             startActivity(intent);
         } catch (ActivityNotFoundException e) {
-            throw new Exception("Activity not found");
+            throw new ChooserException(e);
         }
         return filePathOriginal;
     }
