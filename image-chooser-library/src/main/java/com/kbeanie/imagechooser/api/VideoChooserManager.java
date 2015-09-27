@@ -18,14 +18,10 @@
 
 package com.kbeanie.imagechooser.api;
 
-import java.io.File;
-import java.util.Calendar;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
@@ -33,7 +29,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.kbeanie.imagechooser.BuildConfig;
-import com.kbeanie.imagechooser.factory.DateFactory;
+import com.kbeanie.imagechooser.factory.UriFactory;
 import com.kbeanie.imagechooser.threads.VideoProcessorListener;
 import com.kbeanie.imagechooser.threads.VideoProcessorThread;
 
@@ -162,11 +158,8 @@ public class VideoChooserManager extends BChooser implements
         checkDirectory();
         try {
             Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-            filePathOriginal = FileUtils.getDirectory(foldername)
-                    + File.separator + DateFactory.getInstance().getTimeInMillis() //Calendar.getInstance().getTimeInMillis()
-                    + ".mp4";
-            intent.putExtra(MediaStore.EXTRA_OUTPUT,
-                    Uri.fromFile(new File(filePathOriginal)));
+            filePathOriginal = buildFilePathOriginal(foldername);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, buildCaptureUri(filePathOriginal));
             if (extras != null) {
                 intent.putExtras(extras);
             }

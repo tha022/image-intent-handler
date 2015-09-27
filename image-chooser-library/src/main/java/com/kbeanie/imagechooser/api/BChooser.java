@@ -32,8 +32,15 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
 import android.support.v4.app.Fragment;
+import android.util.Log;
+
+import com.kbeanie.imagechooser.factory.DateFactory;
+import com.kbeanie.imagechooser.factory.UriFactory;
 
 public abstract class BChooser {
+
+    static final String TAG = BChooser.class.getSimpleName();
+
     protected Activity activity;
 
     protected Fragment fragment;
@@ -134,7 +141,9 @@ public abstract class BChooser {
         File directory = null;
         directory = new File(FileUtils.getDirectory(foldername));
         if (!directory.exists()) {
-            directory.mkdirs();
+            if(!directory.mkdirs() && !directory.isDirectory()) {
+                Log.d(TAG, "Error creating directory: "+directory);
+            }
         }
     }
 
@@ -238,5 +247,15 @@ public abstract class BChooser {
     private void initDirector(Context context){
         BChooserPreferences preferences = new BChooserPreferences(context);
         foldername = preferences.getFolderName();
+    }
+
+    protected String buildFilePathOriginal(String foldername) {
+        return FileUtils.getDirectory(foldername)
+                + File.separator + DateFactory.getInstance().getTimeInMillis()
+                + ".jpg";
+    }
+
+    protected Uri buildCaptureUri(String filePathOriginal) {
+        return UriFactory.getInstance().getCaptureUri(filePathOriginal);
     }
 }

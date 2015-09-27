@@ -20,14 +20,14 @@ public class DateFactory {
 
     public long getTimeInMillis() {
         if(timeInMillis != null) {
-            Log.d(TAG, "Time explicity set. We returning it: "+timeInMillis);
+            Log.d(TAG, "Time set. Is: "+timeInMillis);
             return timeInMillis;
         }
         return Calendar.getInstance().getTimeInMillis();
     }
 
     public void setTimeInMillis(long timeInMillis) {
-        Log.d(TAG, "Setting time explicity. timeInMillis: "+timeInMillis);
+        Log.d(TAG, "Setting time. Is: "+timeInMillis);
         this.timeInMillis = timeInMillis;
     }
 
