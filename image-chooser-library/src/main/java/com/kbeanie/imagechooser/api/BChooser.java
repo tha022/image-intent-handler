@@ -250,12 +250,10 @@ public abstract class BChooser {
     }
 
     protected String buildFilePathOriginal(String foldername) {
-        return FileUtils.getDirectory(foldername)
-                + File.separator + DateFactory.getInstance().getTimeInMillis()
-                + ".jpg";
+        return UriFactory.getInstance().getFilePathOriginal(foldername);
     }
 
     protected Uri buildCaptureUri(String filePathOriginal) {
-        return UriFactory.getInstance().getCaptureUri(filePathOriginal);
+        return Uri.fromFile(new File(filePathOriginal));
     }
 }

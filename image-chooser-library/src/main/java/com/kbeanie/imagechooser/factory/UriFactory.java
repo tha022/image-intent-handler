@@ -20,7 +20,7 @@ public class UriFactory {
      *
      * intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
      */
-    private Uri captureUri;
+    private String filePathOriginal;
 
 
     private UriFactory() {
@@ -28,23 +28,25 @@ public class UriFactory {
     }
 
 
-    public void setCaptureUri(Uri captureUri) {
-        Log.d(TAG, "Capture URI set. Is: " + captureUri);
-        this.captureUri = captureUri;
+    public void setFilePathOriginal(String filePathOriginal) {
+        Log.d(TAG, "File path set. Is: " + filePathOriginal);
+        this.filePathOriginal = filePathOriginal;
     }
 
-    public Uri getCaptureUri(String filePathOriginal) {
-        if(captureUri != null) {
-            Log.d(TAG, "Capture URI set. We return: "+captureUri);
-            return captureUri;
+    public String getFilePathOriginal(String foldername) {
+        if(filePathOriginal != null) {
+            Log.d(TAG, "File path set. We return: "+filePathOriginal);
+            return filePathOriginal;
         }
 
-        return Uri.fromFile(new File(filePathOriginal));
+        return FileUtils.getDirectory(foldername)
+                + File.separator + DateFactory.getInstance().getTimeInMillis()
+                + ".jpg";
     }
 
     public void reset() {
         Log.d(TAG, "We reset capture URI");
-        this.captureUri = null;
+        this.filePathOriginal = null;
     }
 
 

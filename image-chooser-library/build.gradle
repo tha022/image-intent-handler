@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'maven'
 apply plugin: 'signing'
 
-group = "com.kbeanie"
+group = "com.seniordev" // "com.kbeanie"
 
 configurations {
     archives {
@@ -24,7 +24,11 @@ uploadArchives {
             MavenDeployment deployment -> signing.signPom(deployment)
         }
 
-        repository(url: sonatypeRepo) {
+        pom.groupId = "com.seniordev"
+        pom.artifactId = "image-chooser-library"
+        pom.version = "1.5"
+
+        repository(url: 'http://ci.bipper.com/artifactory/ext-release-local') { // sonatypeRepo ext-release-local
             authentication(userName: sonatypeUsername,
                     password: sonatypePassword)
         }
@@ -33,12 +37,13 @@ uploadArchives {
             name 'Image Chooser Library'
             packaging 'aar'
             description 'Image Chooser Library for Android Applications'
-            url 'https://github.com/coomar2841/image-chooser-library'
+            //url 'https://github.com/coomar2841/image-chooser-library'
+            url 'https://github.com/tha022/image-intent-handler'
 
             scm {
-                url 'scm:git@github.com:coomar2841/image-chooser-library.git'
-                connection 'scm:git@github.com:coomar2841/image-chooser-library.git'
-                developerConnection 'scm:git@github.com:coomar2841/image-chooser-library.git'
+                url                 'scm:git:ssh://git@ci.bipper.com:3687/image-chooser-library'
+                connection          'scm:git:ssh://git@ci.bipper.com:3687/image-chooser-library'
+                developerConnection 'scm:git:ssh://git@ci.bipper.com:3687/image-chooser-library'
             }
 
             licenses {
@@ -51,9 +56,9 @@ uploadArchives {
 
             developers {
                 developer {
-                    id 'coomar2841'
-                    name 'Kumar Bibek'
-                    email 'coomar.101@gmail.com'
+                    id 'tha022'
+                    name 'Thomas Vervik'
+                    email 'thomas.vervik@seniordevonly.com'
                 }
             }
         }
@@ -68,7 +73,7 @@ android {
         minSdkVersion 8
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
-        versionName "1.2"
+        versionName "1.5"
     }
     buildTypes {
         release {
@@ -76,9 +81,21 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    signingConfigs {
+        debug {
+            storeFile file("debug.keystore")
+        }
+        release {
+            keyAlias digReleaseKeyAlias
+            keyPassword digReleaseKeyPassword
+            storeFile file(digReleaseStoreFile)
+            storePassword digReleaseStorePassword
+        }
+    }
 }
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:support-v4:22.1.1'
+    compile 'com.android.support:support-v4:23.0.1'
 }
